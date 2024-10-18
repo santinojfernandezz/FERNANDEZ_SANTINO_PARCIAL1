@@ -44,26 +44,23 @@ El proyecto está compuesto por las siguientes clases y subclases:
 ### 1. **Servicio** (Clase Abstracta)
 - **Atributos**:
    - `codigo`: Código del servicio.
-   - `nombre`: Nombre del servicio.
-   - `precioBase`: Precio base del servicio.
+   - `enPromocion`: Indica si esta o no en descuento el servicio.
+   - `porcentajeDescuento`: Porcentaje de descuento del servicio.
 - **Métodos Abstractos**:
    - `calcularPrecioFinal()`: Método que debe ser implementado en las subclases para calcular el precio final del servicio.
 
 ### 2. **Hospedaje** (Subclase de Servicio)
 - **Atributos Específicos**:
-   - `numeroNoches`: Número de noches reservadas.
-   - `servicioLimpieza`: Indica si se incluye el servicio de limpieza.
-   - `desayuno`: Indica si se incluye el desayuno.
-   - `tarifaExtra`: Tarifa adicional por servicios extras.
-   - `promociones`: Lista de promociones aplicables.
+   - `String` hospedaje : descripcion dle hospedaje.
+   - `double` precioPorNoche : precio por noche de hospedaje.
 - **Métodos**:
-   - `calcularPrecioTotal()`: Calcula el precio total basado en el número de noches, promociones y servicios adicionales.
+   - `calcularPrecioTotal()`: Calcula el precio final por noche basado en el dia donde se pide el servicio.
 
 ### 3. **Gastronomía** (Subclase de Servicio)
 - **Atributos Específicos**:
-   - `tipoMenu`: Tipo de menú seleccionado (desayuno, almuerzo, cena).
-   - `diaSemana`: Día de la semana en que se solicita el servicio.
-   - `aplicaDescuento`: Indica si se aplica un descuento.
+   - `String` gastronomia :descripcion de la gastronomia.
+   - `double` precio : precio del menu.
+   - `int` diaSemDesc : numero del dia de la semana en el que hay descuento.
 - **Métodos**:
-   - `calcularPrecioFinal()`: Calcula el precio final de acuerdo con el menú y las promociones disponibles.
+   - `calcularPrecioFinal()`: Calcula el precio final de acuerdo con el dia de la semana en el que encontramos.
 
