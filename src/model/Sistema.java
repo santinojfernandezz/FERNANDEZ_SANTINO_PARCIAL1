@@ -1,71 +1,77 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package model;
 
-package test;
-
+import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.Month;
-import model.Sistema;
-import model.Gastronomia;
-import model.Hospedaje;
-import model.Servicio;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Main {
+/**
+ *
+ * @author MIPC
+ */
+public class Sistema {
+    private List<Servicio> lstServicios = new ArrayList<>();
     
-    public static void main(String[] args) {
-        Sistema sistema = new Sistema();
-        System.out.println("1-1");
-        try{
-            //Gastronomia(String gastronomia, double precio, int diaSemDesc, String codServicio, double porcentajeDescuento, boolean enPromocion)
-            Gastronomia gastronomiaUno = new Gastronomia("Hamburguesa criolla", 180.0, 4, "4892", 15.0, true);
-        }catch(Exception e){
-            System.out.println(e);
+    public Servicio traerServicio(String codServicio){
+        Servicio retorno = null;
+        for (Servicio servicioEnLista : lstServicios) {
+            if (servicioEnLista.getCodServicio().equals(codServicio)) {
+                retorno = servicioEnLista;
+            }
         }
-        System.out.println("1-2");
-        try{
-            Gastronomia gastronomiados = new Gastronomia("Hamburguesa criolla", 180.0, 4, "489235", 15.0, true);
-            System.out.println("exito");
-            System.out.println("2-1");
-            System.out.println(gastronomiados.calcularPrecioFinal(LocalDate.of(2024, Month.OCTOBER, 17)));
-            
-        }catch(Exception e){
-            System.out.println(e);
+        return retorno;
+    }
+    
+    public List<Servicio> traerServicio(boolean promocion){
+        List<Servicio> servicios = new ArrayList<>();
+        for (Servicio servicioEnLista : lstServicios) {
+            if (servicioEnLista.isEnPromocion() == promocion) {
+                servicios.add(servicioEnLista);
+            }
         }
-        System.out.println("1-3");
-        try{
-            //Hospedaje( String codServicio, String hospedaje, double precioPorNoche,double porcentajeDescuento, boolean enPromocion)
-            Hospedaje hospedajeUno = new Hospedaje("2871", "Cabaña 3 personas", 1500.0, 10.0, true);
-        }catch(Exception e){
-            System.out.println(e);
+        return servicios;
+    }
+    
+    public List<Servicio> traerServicio(boolean enPromocion, LocalDate dia) {
+        List<Servicio> servicios = new ArrayList<>();
+        DayOfWeek diaSemana = dia.getDayOfWeek();
+        for (Servicio servicioEnLista : lstServicios) {
+            if(servicioEnLista instanceof Hospedaje){
+                if (servicioEnLista.isEnPromocion() == enPromocion && diaSemana != DayOfWeek.SATURDAY && diaSemana != DayOfWeek.SUNDAY) {
+                servicios.add(servicioEnLista);
+            }} else{
+                Gastronomia servicioG = (Gastronomia) servicioEnLista;
+                if (servicioEnLista.isEnPromocion() == enPromocion && servicioG.getDiaSemDesc() == diaSemana.getValue()) {
+                servicios.add(servicioEnLista);
+            }}
         }
-        System.out.println("1-4");
-        try{
-            Hospedaje hospedajeDos = new Hospedaje("287282", "Cabaña 3 personas", 1500.0, 10.0, true);
-            System.out.println("exitoooo");
-            System.out.println("2-2");
-            System.out.println(hospedajeDos.calcularPrecioFinal(LocalDate.of(2024, Month.OCTOBER, 12)));
-            System.out.println(hospedajeDos.calcularPrecioFinal(LocalDate.now()));
-        }catch(Exception e){
-            System.out.println(e);
-        }
+        return servicios;
+    }
+    
+    public boolean agregarGastronomia(String codServicio, double porcentajeDescuento, boolean enPromocion, String gastronomia, double precio, int diaSemDesc) throws Exception{
         
-        try{
-            System.out.println("3");
-            boolean g1 = sistema.agregarGastronomia("858927", 15.0, true, "Milanesa con puré", 350.0, 3);
-            boolean h1 = sistema.agregarHospedaje("489259", 10.0, true, "Habitación triple", 2200.0);
-            boolean g2 = sistema.agregarGastronomia("182835", 20.0, false, "Gaseosa", 120.0, 3);
-            boolean h2 = sistema.agregarHospedaje("758972", 15.0, false, "Habitación simple", 1000.0);
-            System.out.println(sistema.traerServicio("858927"));
-            System.out.println(sistema.traerServicio("489259"));
-            System.out.println(sistema.traerServicio("182835"));
-            System.out.println(sistema.traerServicio("758972"));
-            System.out.println("4-1");
-            System.out.println(sistema.traerServicio(true));
-            
-            System.out.println("4-2");
-            System.out.println(sistema.traerServicio(true, LocalDate.now()));
-            
-        }catch(Exception e){
-            System.out.println(e);
+        for (Servicio servicioEnLista : lstServicios) {
+            if (servicioEnLista.getCodServicio().equals(codServicio)) {
+                throw new Exception("Ya existe eso objeto en el sistema.");
+            }
         }
+        this.lstServicios.add(new Gastronomia(gastronomia, precio,diaSemDesc, codServicio,  porcentajeDescuento, enPromocion));
+        return true;
+    }
+    public boolean agregarHospedaje(String codServicio, double porcentajeDescuento, boolean enPromocion, String hospedaje,double precioPorNoche) throws Exception{
+        
+        for (Servicio servicioEnLista : lstServicios) {
+            if (servicioEnLista.getCodServicio().equals(codServicio)) {
+                throw new Exception("Ya existe eso objeto en el sistema.");
+            }
+        }
+        this.lstServicios.add(new Hospedaje(codServicio,hospedaje,precioPorNoche,porcentajeDescuento,enPromocion));
+        return true;
     }
     
 }
